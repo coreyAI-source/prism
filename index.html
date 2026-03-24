@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prism — Think clearer.</title>
+  <meta name="description" content="Your personal thinking partner. Ask anything — essays, math, science, code. Free, instant, always on." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+</head>
+<body class="page-landing">
+
+  <!-- ░░ SHARED BACKGROUND ░░ -->
+  <div class="dot-grid"  aria-hidden="true"></div>
+  <div class="aurora"    aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+  <div class="grain"     aria-hidden="true"></div>
+  <div id="spotlight"    aria-hidden="true"></div>
+
+  <!-- ░░ NAV ░░ -->
+  <nav class="nav glass">
+    <div class="nav-inner">
+      <div class="logo">
+        <div class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none">
+            <defs>
+              <linearGradient id="navL" x1="0%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#f0abfc"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+              <linearGradient id="navR" x1="20%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient>
+            </defs>
+            <!-- Left face -->
+            <polygon points="3,34 20,4 20,34" fill="url(#navL)"/>
+            <!-- Right face -->
+            <polygon points="20,4 37,34 20,34" fill="url(#navR)" opacity="0.92"/>
+            <!-- Ridge -->
+            <line x1="20" y1="4" x2="20" y2="34" stroke="rgba(255,255,255,0.4)" stroke-width="0.75"/>
+            <!-- Specular highlight -->
+            <line x1="12" y1="9" x2="8" y2="26" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="logo-text">Prism</span>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <a href="games.html" class="btn-glass">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 2l-4 5-4-5"/><line x1="9" y1="14" x2="15" y2="14"/><line x1="12" y1="11" x2="12" y2="17"/></svg>
+          Games
+        </a>
+        <a href="chat.html" class="btn-glass">
+          Open Prism
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ░░░ HERO ░░░ -->
+    <section class="hero">
+      <div class="container hero-inner">
+
+        <!-- Left: copy -->
+        <div class="hero-copy" data-reveal>
+          <div class="hero-badge">
+            <span class="badge-dot" aria-hidden="true"></span>
+            7 AI models &nbsp;·&nbsp; Always free
+          </div>
+          <h1 class="hero-heading">School just<br/>got easier.</h1>
+          <p class="hero-sub">
+            Ask anything and actually get it. Essays, math, science, code — real answers that make sense, not walls of text. Free, forever.
+          </p>
+          <div class="hero-actions">
+            <a href="chat.html" class="btn-primary" id="heroCta">
+              Start chatting free
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <span class="hero-note">No account. No credit card.</span>
+          </div>
+        </div>
+
+        <!-- Right: animated chat preview card -->
+        <div class="hero-preview-wrap" id="previewWrap" aria-hidden="true">
+          <div class="chat-preview glass" id="chatPreview">
+            <div class="preview-titlebar">
+              <div class="traffic-lights">
+                <span style="background:#ff5f57"></span>
+                <span style="background:#ffbd2e"></span>
+                <span style="background:#28c840"></span>
+              </div>
+              <div class="preview-brand">
+                <svg width="12" height="12" viewBox="0 0 40 40" fill="none"><defs><linearGradient id="pvL" x1="0%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#f0abfc"/><stop offset="100%" stop-color="#a855f7"/></linearGradient><linearGradient id="pvR" x1="20%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs><polygon points="3,34 20,4 20,34" fill="url(#pvL)"/><polygon points="20,4 37,34 20,34" fill="url(#pvR)" opacity="0.92"/><line x1="20" y1="4" x2="20" y2="34" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/></svg>
+                Prism
+              </div>
+              <div style="width:48px"></div>
+            </div>
+            <div class="preview-msgs" id="previewMsgs"></div>
+            <div class="preview-bar">
+              <div class="preview-input-mock">
+                <span id="previewTyping"></span><span class="preview-cursor">|</span>
+              </div>
+              <div class="preview-send-mock">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="scroll-hint" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </section>
+
+    <!-- ░░░ FEATURES ░░░ -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-eyebrow" data-reveal>Why Prism</div>
+        <h2 class="section-heading" data-reveal>Built different.</h2>
+
+        <div class="features-grid">
+
+          <div class="feature-card glass" data-reveal data-tilt>
+            <div class="feature-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Instant answers.</h3>
+            <p class="feature-body">Ask something, get a real answer. Clear, structured, actually useful — in seconds. Not ten blue links. Not a Wikipedia dump.</p>
+          </div>
+
+          <div class="feature-card glass" data-reveal data-tilt style="--reveal-delay: 0.1s">
+            <div class="feature-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Remembers everything.</h3>
+            <p class="feature-body">Your full conversation saves in your browser. No account needed. Prism picks up exactly where you left off, every time.</p>
+          </div>
+
+          <div class="feature-card glass" data-reveal data-tilt style="--reveal-delay: 0.2s">
+            <div class="feature-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Always online.</h3>
+            <p class="feature-body">Seven AI models run behind the scenes. When one hits a rate limit, the next one kicks in. Prism never goes down.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░░ CTA ░░░ -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-card glass" data-reveal>
+          <div class="cta-prism" aria-hidden="true">
+            <svg viewBox="0 0 60 60" fill="none">
+              <polygon points="30,5 56,52 4,52" fill="url(#ctaG)"/>
+              <defs>
+                <linearGradient id="ctaG" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%"   stop-color="#e879f9"/>
+                  <stop offset="50%"  stop-color="#818cf8"/>
+                  <stop offset="100%" stop-color="#22d3ee"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <h2 class="cta-heading">Ready to think clearer?</h2>
+          <p class="cta-sub">It takes three seconds to start. No account. No card. No catch.</p>
+          <a href="chat.html" class="btn-primary btn-large" id="ctaBtn">
+            Open Prism — it's free
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ░░ FOOTER ░░ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <svg width="16" height="16" viewBox="0 0 40 40" fill="none"><defs><linearGradient id="fL" x1="0%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#f0abfc"/><stop offset="100%" stop-color="#a855f7"/></linearGradient><linearGradient id="fR" x1="20%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs><polygon points="3,34 20,4 20,34" fill="url(#fL)"/><polygon points="20,4 37,34 20,34" fill="url(#fR)" opacity="0.92"/><line x1="20" y1="4" x2="20" y2="34" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/></svg>
+        <span>Prism</span>
+      </div>
+      <p class="footer-text">Powered by <a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a>. Free for everyone.</p>
+    </div>
+  </footer>
+
+  <!-- Bottom ad strip -->
+  <div class="ad-strip ad-bottom" aria-hidden="true">
+    <ins class="adsbygoogle" style="display:block"
+      data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX" data-ad-slot="YOUR_BOTTOM_AD_SLOT"
+      data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <script src="landing.js"></script>
+</body>
+</html>

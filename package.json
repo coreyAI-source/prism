@@ -1,0 +1,11 @@
+{
+  "name": "prism",
+  "version": "1.0.0",
+  "description": "Prism — AI chat powered by OpenRouter",
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}

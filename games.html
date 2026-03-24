@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prism — Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Games page layout ─────────────────────────────── */
+    .games-hero {
+      padding: calc(var(--nav-h) + 64px) 0 52px;
+      text-align: center;
+    }
+    .games-hero-heading {
+      font-size: clamp(56px, 7vw, 100px);
+      font-weight: 900;
+      line-height: 1.01;
+      letter-spacing: -4px;
+      padding-bottom: 0.12em;
+      background: linear-gradient(145deg, #ffffff 15%, #f0abfc 38%, #a855f7 60%, #22d3ee 90%);
+      background-size: 280% 280%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: heroFlow 5s ease infinite;
+    }
+    .games-hero-sub {
+      font-size: 17px;
+      color: var(--text-dim);
+      margin-top: 16px;
+      letter-spacing: 0.2px;
+    }
+
+    /* ── Games grid ────────────────────────────────────── */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 32px 120px;
+    }
+    @media (max-width: 860px) {
+      .games-grid { grid-template-columns: 1fr; padding: 0 20px 80px; }
+    }
+
+    /* ── Game card ─────────────────────────────────────── */
+    .game-card {
+      border-radius: 24px;
+      padding: 26px 26px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .game-card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        inset 0 2px 0 rgba(255,255,255,0.32),
+        0 40px 90px rgba(0,0,0,0.5),
+        0 0 80px rgba(168,85,247,0.15);
+    }
+    .game-card-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .game-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+    .game-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--purple-hi);
+      background: rgba(168,85,247,0.12);
+      border: 1px solid rgba(168,85,247,0.28);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    /* ── Canvas ────────────────────────────────────────── */
+    canvas {
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        0 0 40px rgba(168,85,247,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      cursor: pointer;
+      max-width: 100%;
+      display: block;
+      touch-action: none;
+    }
+
+    /* ── Controls ──────────────────────────────────────── */
+    .game-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .ctrl-badge {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 7px;
+      padding: 4px 11px;
+      font-size: 12px;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      color: var(--text-dim);
+      letter-spacing: 0.3px;
+    }
+  </style>
+</head>
+<body class="page-landing">
+
+  <!-- ░░ SHARED BACKGROUND ░░ -->
+  <div class="dot-grid"  aria-hidden="true"></div>
+  <div class="aurora"    aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+  <div class="grain"     aria-hidden="true"></div>
+  <div id="spotlight"    aria-hidden="true"></div>
+
+  <!-- ░░ NAV ░░ -->
+  <nav class="nav glass">
+    <div class="nav-inner">
+      <a href="index.html" class="logo" aria-label="Home">
+        <div class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none">
+            <defs>
+              <linearGradient id="navL" x1="0%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#f0abfc"/><stop offset="100%" stop-color="#a855f7"/></linearGradient>
+              <linearGradient id="navR" x1="20%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient>
+            </defs>
+            <polygon points="3,34 20,4 20,34" fill="url(#navL)"/>
+            <polygon points="20,4 37,34 20,34" fill="url(#navR)" opacity="0.92"/>
+            <line x1="20" y1="4" x2="20" y2="34" stroke="rgba(255,255,255,0.4)" stroke-width="0.75"/>
+            <line x1="12" y1="9" x2="8" y2="26" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="logo-text">Prism</span>
+      </a>
+      <div style="display:flex;gap:10px;align-items:center">
+        <a href="games.html" class="btn-glass" style="background:rgba(168,85,247,0.15);border-color:rgba(168,85,247,0.35)">Games</a>
+        <a href="chat.html" class="btn-glass">
+          Open Prism
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section class="games-hero">
+      <div class="container">
+        <h1 class="games-hero-heading" data-reveal>Take a break.</h1>
+        <p class="games-hero-sub" data-reveal style="--reveal-delay:0.12s">Two classics, Prism edition. Free forever.</p>
+      </div>
+    </section>
+
+    <!-- Games -->
+    <div class="games-grid">
+
+      <!-- ░░ FLAPPY BIRD ░░ -->
+      <div class="game-card glass" data-reveal>
+        <div class="game-card-header">
+          <div class="game-title">Flappy Prism</div>
+          <div class="game-tag">Solo</div>
+        </div>
+        <canvas id="flappyCanvas" width="430" height="520" aria-label="Flappy Prism game"></canvas>
+        <div class="game-controls">
+          <span class="ctrl-badge">Space</span>
+          <span class="ctrl-badge">Click</span>
+          <span class="ctrl-badge">Tap</span>
+        </div>
+      </div>
+
+      <!-- ░░ PONG ░░ -->
+      <div class="game-card glass" data-reveal style="--reveal-delay:0.1s">
+        <div class="game-card-header">
+          <div class="game-title">Pong</div>
+          <div class="game-tag">vs AI</div>
+        </div>
+        <canvas id="pongCanvas" width="430" height="320" aria-label="Pong game"></canvas>
+        <div class="game-controls">
+          <span class="ctrl-badge">W / S</span>
+          <span class="ctrl-badge">↑ / ↓</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ░░ FOOTER ░░ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <svg width="16" height="16" viewBox="0 0 40 40" fill="none"><defs><linearGradient id="fL" x1="0%" y1="0%" x2="80%" y2="100%"><stop offset="0%" stop-color="#f0abfc"/><stop offset="100%" stop-color="#a855f7"/></linearGradient><linearGradient id="fR" x1="20%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs><polygon points="3,34 20,4 20,34" fill="url(#fL)"/><polygon points="20,4 37,34 20,34" fill="url(#fR)" opacity="0.92"/><line x1="20" y1="4" x2="20" y2="34" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/></svg>
+        <span>Prism</span>
+      </div>
+      <p class="footer-text">Powered by <a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a>. Free for everyone.</p>
+    </div>
+  </footer>
+
+  <script>
+  /* ============================================================
+     CURSOR SPOTLIGHT
+     ============================================================ */
+  (function() {
+    const el = document.getElementById('spotlight');
+    if (!el) return;
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let cx = mx, cy = my, moved = false;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      if (!moved) { moved = true; el.classList.add('active'); }
+    });
+    (function tick() {
+      cx += (mx - cx) * 0.09; cy += (my - cy) * 0.09;
+      el.style.left = cx + 'px'; el.style.top = cy + 'px';
+      requestAnimationFrame(tick);
+    })();
+  })();
+
+  /* ============================================================
+     SCROLL REVEAL
+     ============================================================ */
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); revealObs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
+
+  /* ============================================================
+     FLAPPY PRISM
+     ============================================================ */
+  (function() {
+    const canvas = document.getElementById('flappyCanvas');
+    const ctx    = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    /* — Physics constants — */
+    const BIRD_X       = 88;
+    const BIRD_R       = 14;
+    const GRAVITY      = 0.44;
+    const FLAP_VEL     = -9.2;
+    const PIPE_W       = 56;
+    const PIPE_GAP     = 168;
+    const PIPE_SPEED   = 2.9;
+    const PIPE_EVERY   = 88; /* frames between spawns */
+
+    let state  = 'idle';   /* idle | playing | dead */
+    let bird, pipes, score, frame, best;
+
+    best = parseInt(localStorage.getItem('prism_flappy_best') || '0');
+
+    function reset() {
+      bird  = { y: H / 2, vy: 0, angle: 0 };
+      pipes = [];
+      score = 0;
+      frame = 0;
+    }
+
+    function flap() {
+      if (state === 'idle')    { state = 'playing'; bird.vy = FLAP_VEL; }
+      else if (state === 'playing') { bird.vy = FLAP_VEL; }
+      else if (state === 'dead')    { reset(); state = 'playing'; }
+    }
+
+    /* Input */
+    canvas.addEventListener('click', flap);
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); flap(); }, { passive: false });
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space' || e.code === 'ArrowUp') {
+        /* Only intercept space if canvas is near viewport */
+        const r = canvas.getBoundingClientRect();
+        if (r.bottom > 0 && r.top < window.innerHeight) { e.preventDefault(); flap(); }
+      }
+    });
+
+    /* Pipe spawning */
+    function spawnPipe() {
+      const minH = 64, maxH = H - PIPE_GAP - 64;
+      pipes.push({ x: W + 10, topH: Math.random() * (maxH - minH) + minH, scored: false });
+    }
+
+    /* Collision */
+    function hit() {
+      if (bird.y - BIRD_R < 0 || bird.y + BIRD_R > H) return true;
+      for (const p of pipes) {
+        if (BIRD_X + BIRD_R > p.x && BIRD_X - BIRD_R < p.x + PIPE_W) {
+          if (bird.y - BIRD_R < p.topH || bird.y + BIRD_R > p.topH + PIPE_GAP) return true;
+        }
+      }
+      return false;
+    }
+
+    /* — Drawing helpers — */
+    function rrect(x, y, w, h, radii) {
+      const [tl, tr, br, bl] = Array.isArray(radii) ? radii : [radii, radii, radii, radii];
+      ctx.beginPath();
+      ctx.moveTo(x + tl, y);
+      ctx.lineTo(x + w - tr, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + tr);
+      ctx.lineTo(x + w, y + h - br);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - br, y + h);
+      ctx.lineTo(x + bl, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - bl);
+      ctx.lineTo(x, y + tl);
+      ctx.quadraticCurveTo(x, y, x + tl, y);
+      ctx.closePath();
+    }
+
+    function drawBackground() {
+      ctx.fillStyle = '#05050d';
+      ctx.fillRect(0, 0, W, H);
+      /* Dot grid */
+      ctx.fillStyle = 'rgba(255,255,255,0.028)';
+      for (let x = 14; x < W; x += 28) {
+        for (let y = 14; y < H; y += 28) {
+          ctx.beginPath(); ctx.arc(x, y, 1, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+    }
+
+    function drawPipe(p) {
+      /* Top */
+      const tg = ctx.createLinearGradient(p.x, 0, p.x + PIPE_W, 0);
+      tg.addColorStop(0, 'rgba(99,102,241,0.92)');
+      tg.addColorStop(1, 'rgba(168,85,247,0.75)');
+      ctx.fillStyle = tg;
+      rrect(p.x, 0, PIPE_W, p.topH, [0, 0, 10, 10]); ctx.fill();
+      /* Top specular */
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      rrect(p.x + 5, 0, 7, p.topH - 6, [0, 0, 3, 3]); ctx.fill();
+      /* Top glow at bottom edge */
+      const tglow = ctx.createLinearGradient(0, p.topH - 12, 0, p.topH);
+      tglow.addColorStop(0, 'transparent');
+      tglow.addColorStop(1, 'rgba(168,85,247,0.25)');
+      ctx.fillStyle = tglow;
+      rrect(p.x, p.topH - 12, PIPE_W, 12, [0, 0, 10, 10]); ctx.fill();
+
+      /* Bottom */
+      const botY = p.topH + PIPE_GAP;
+      const bg2 = ctx.createLinearGradient(p.x, 0, p.x + PIPE_W, 0);
+      bg2.addColorStop(0, 'rgba(99,102,241,0.92)');
+      bg2.addColorStop(1, 'rgba(168,85,247,0.75)');
+      ctx.fillStyle = bg2;
+      rrect(p.x, botY, PIPE_W, H - botY, [10, 10, 0, 0]); ctx.fill();
+      /* Bottom specular */
+      ctx.fillStyle = 'rgba(255,255,255,0.12)';
+      rrect(p.x + 5, botY + 6, 7, H - botY - 6, [3, 3, 0, 0]); ctx.fill();
+      /* Bottom glow at top edge */
+      const bglow = ctx.createLinearGradient(0, botY, 0, botY + 12);
+      bglow.addColorStop(0, 'rgba(168,85,247,0.25)');
+      bglow.addColorStop(1, 'transparent');
+      ctx.fillStyle = bglow;
+      rrect(p.x, botY, PIPE_W, 12, [10, 10, 0, 0]); ctx.fill();
+
+      /* Gap shimmer */
+      const gap = ctx.createLinearGradient(p.x, p.topH, p.x, p.topH + PIPE_GAP);
+      gap.addColorStop(0,   'rgba(168,85,247,0.05)');
+      gap.addColorStop(0.5, 'rgba(6,182,212,0.02)');
+      gap.addColorStop(1,   'rgba(168,85,247,0.05)');
+      ctx.fillStyle = gap;
+      ctx.fillRect(p.x, p.topH, PIPE_W, PIPE_GAP);
+    }
+
+    function drawBird() {
+      ctx.save();
+      ctx.translate(BIRD_X, bird.y);
+      ctx.rotate(Math.max(-0.45, Math.min(1.1, bird.angle)));
+
+      /* Outer glow */
+      const og = ctx.createRadialGradient(0, 0, 0, 0, 0, BIRD_R * 3);
+      og.addColorStop(0, 'rgba(168,85,247,0.4)');
+      og.addColorStop(1, 'transparent');
+      ctx.fillStyle = og;
+      ctx.beginPath(); ctx.arc(0, 0, BIRD_R * 3, 0, Math.PI * 2); ctx.fill();
+
+      /* Body */
+      const bd = ctx.createRadialGradient(-3, -4, 1, 0, 0, BIRD_R);
+      bd.addColorStop(0, '#f9a8d4');
+      bd.addColorStop(0.45, '#e879f9');
+      bd.addColorStop(1, '#6366f1');
+      ctx.fillStyle = bd;
+      ctx.beginPath(); ctx.arc(0, 0, BIRD_R, 0, Math.PI * 2); ctx.fill();
+
+      /* Wing */
+      ctx.fillStyle = 'rgba(168,85,247,0.5)';
+      ctx.beginPath();
+      ctx.ellipse(-4, 4, 8, 5, -0.4, 0, Math.PI * 2);
+      ctx.fill();
+
+      /* Specular */
+      ctx.fillStyle = 'rgba(255,255,255,0.45)';
+      ctx.beginPath(); ctx.arc(-4, -5, 4.5, 0, Math.PI * 2); ctx.fill();
+
+      /* Eye white */
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(5, -3, 4.5, 0, Math.PI * 2); ctx.fill();
+      /* Pupil */
+      ctx.fillStyle = '#1a1a2e';
+      ctx.beginPath(); ctx.arc(6, -3, 2.2, 0, Math.PI * 2); ctx.fill();
+      /* Eye shine */
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.beginPath(); ctx.arc(7, -4, 0.9, 0, Math.PI * 2); ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawScore() {
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.font = '700 38px Inter, sans-serif';
+      ctx.shadowColor = 'rgba(168,85,247,0.7)';
+      ctx.shadowBlur = 14;
+      ctx.fillStyle = 'rgba(255,255,255,0.92)';
+      ctx.fillText(score, W / 2, 54);
+      if (best > 0 && state === 'playing') {
+        ctx.shadowBlur = 0;
+        ctx.font = '500 12px Inter, sans-serif';
+        ctx.fillStyle = 'rgba(255,255,255,0.28)';
+        ctx.fillText('best ' + best, W / 2, 74);
+      }
+      ctx.restore();
+    }
+
+    function drawOverlay(headline, sub, showScore) {
+      /* Dim */
+      ctx.fillStyle = 'rgba(5,5,13,0.7)';
+      ctx.fillRect(0, 0, W, H);
+
+      /* Card */
+      const cx = W / 2, cy = H / 2;
+      const cw = 220, ch = showScore ? 178 : 142;
+      ctx.fillStyle = 'rgba(255,255,255,0.055)';
+      rrect(cx - cw / 2, cy - ch / 2, cw, ch, 20); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+      ctx.lineWidth = 1;
+      rrect(cx - cw / 2, cy - ch / 2, cw, ch, 20); ctx.stroke();
+      /* Top specular */
+      const sg = ctx.createLinearGradient(cx - cw / 2, cy - ch / 2, cx + cw / 2, cy - ch / 2);
+      sg.addColorStop(0, 'transparent');
+      sg.addColorStop(0.4, 'rgba(255,255,255,0.12)');
+      sg.addColorStop(1, 'transparent');
+      ctx.fillStyle = sg;
+      rrect(cx - cw / 2, cy - ch / 2, cw, 1.5, [20, 20, 0, 0]); ctx.fill();
+
+      ctx.textAlign = 'center';
+      ctx.shadowColor = 'rgba(168,85,247,0.9)';
+      ctx.shadowBlur = 18;
+      ctx.fillStyle = '#fff';
+      ctx.font = '700 26px Inter, sans-serif';
+      ctx.fillText(headline, cx, cy - 22);
+      ctx.shadowBlur = 0;
+
+      ctx.font = '400 13px Inter, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.45)';
+      ctx.fillText(sub, cx, cy + 6);
+
+      if (showScore) {
+        ctx.font = '700 18px Inter, sans-serif';
+        ctx.fillStyle = 'rgba(168,85,247,0.95)';
+        ctx.shadowColor = 'rgba(168,85,247,0.6)';
+        ctx.shadowBlur = 10;
+        ctx.fillText('Score: ' + score, cx, cy + 42);
+        ctx.shadowBlur = 0;
+        if (score >= best && best > 0) {
+          ctx.font = '600 12px Inter, sans-serif';
+          ctx.fillStyle = 'rgba(34,197,94,0.9)';
+          ctx.fillText('New best!', cx, cy + 64);
+        } else if (best > 0) {
+          ctx.font = '400 12px Inter, sans-serif';
+          ctx.fillStyle = 'rgba(255,255,255,0.25)';
+          ctx.fillText('Best: ' + best, cx, cy + 64);
+        }
+      }
+    }
+
+    function loop() {
+      drawBackground();
+
+      if (state === 'playing') {
+        frame++;
+        bird.vy    += GRAVITY;
+        bird.y     += bird.vy;
+        bird.angle  = bird.vy * 0.068;
+
+        if (frame % PIPE_EVERY === 0) spawnPipe();
+
+        for (const p of pipes) {
+          p.x -= PIPE_SPEED;
+          if (!p.scored && p.x + PIPE_W < BIRD_X) { p.scored = true; score++; }
+        }
+        pipes = pipes.filter(p => p.x + PIPE_W > 0);
+
+        if (hit()) {
+          state = 'dead';
+          if (score > best) {
+            best = score;
+            localStorage.setItem('prism_flappy_best', best);
+          }
+        }
+      } else if (state === 'idle') {
+        bird.y = H / 2 + Math.sin(Date.now() / 620) * 9;
+      }
+
+      pipes.forEach(drawPipe);
+      drawBird();
+      if (state !== 'dead') drawScore();
+
+      if      (state === 'idle') drawOverlay('Flappy Prism', 'Tap or Space to start', false);
+      else if (state === 'dead') drawOverlay('Game Over', 'Tap or Space to restart', true);
+
+      requestAnimationFrame(loop);
+    }
+
+    reset();
+    loop();
+  })();
+
+  /* ============================================================
+     PONG
+     ============================================================ */
+  (function() {
+    const canvas = document.getElementById('pongCanvas');
+    const ctx    = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    const PAD_W  = 11;
+    const PAD_H  = 72;
+    const PAD_SPD= 5.6;
+    const BALL_R = 8;
+
+    let state  = 'idle';   /* idle | playing | scored */
+    let p1, p2, ball, scores, keys;
+
+    keys = {};
+    document.addEventListener('keydown', e => { keys[e.code] = true; });
+    document.addEventListener('keyup',   e => { keys[e.code] = false; });
+
+    function reset() {
+      p1     = { x: 18,          y: H / 2 - PAD_H / 2 };
+      p2     = { x: W - 18 - PAD_W, y: H / 2 - PAD_H / 2 };
+      scores = { p1: 0, p2: 0 };
+      launchBall(1);
+    }
+
+    function launchBall(dir) {
+      const angle = (Math.random() * 0.7 - 0.35);
+      const spd   = 5.2;
+      ball = {
+        x: W / 2, y: H / 2,
+        vx: Math.cos(angle) * spd * dir,
+        vy: Math.sin(angle) * spd,
+        trail: [],
+      };
+    }
+
+    /* Click / touch to start */
+    canvas.addEventListener('click', () => {
+      if (state === 'idle' || state === 'scored') state = 'playing';
+    });
+    canvas.addEventListener('touchstart', e => {
+      if (state === 'idle' || state === 'scored') state = 'playing';
+      e.preventDefault();
+    }, { passive: false });
+
+    /* Touch drag for player paddle */
+    canvas.addEventListener('touchmove', e => {
+      e.preventDefault();
+      const t    = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const scaleY = H / rect.height;
+      p1.y = Math.max(0, Math.min(H - PAD_H, (t.clientY - rect.top) * scaleY - PAD_H / 2));
+    }, { passive: false });
+
+    /* — Drawing — */
+    function drawBg() {
+      ctx.fillStyle = '#05050d';
+      ctx.fillRect(0, 0, W, H);
+      /* Dots */
+      ctx.fillStyle = 'rgba(255,255,255,0.025)';
+      for (let x = 14; x < W; x += 28) {
+        for (let y = 14; y < H; y += 28) {
+          ctx.beginPath(); ctx.arc(x, y, 1, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+      /* Center dashes */
+      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([8, 8]);
+      ctx.beginPath(); ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function rrect(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function drawPaddle(x, y, isPlayer) {
+      const g = ctx.createLinearGradient(x, y, x, y + PAD_H);
+      if (isPlayer) {
+        g.addColorStop(0, 'rgba(240,171,252,0.95)');
+        g.addColorStop(1, 'rgba(168,85,247,0.82)');
+      } else {
+        g.addColorStop(0, 'rgba(129,140,248,0.95)');
+        g.addColorStop(1, 'rgba(6,182,212,0.82)');
+      }
+      ctx.shadowColor = isPlayer ? 'rgba(168,85,247,0.75)' : 'rgba(6,182,212,0.75)';
+      ctx.shadowBlur  = 18;
+      ctx.fillStyle   = g;
+      rrect(x, y, PAD_W, PAD_H, 5); ctx.fill();
+      ctx.shadowBlur  = 0;
+      /* Specular */
+      ctx.fillStyle = 'rgba(255,255,255,0.38)';
+      rrect(x + 2, y + 4, 3, 18, 2); ctx.fill();
+    }
+
+    function drawBall() {
+      /* Trail */
+      ball.trail.forEach((t, i) => {
+        const a = (i / ball.trail.length) * 0.38;
+        const r = BALL_R * 0.55 * (i / ball.trail.length);
+        ctx.beginPath(); ctx.arc(t.x, t.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(168,85,247,${a})`; ctx.fill();
+      });
+
+      /* Glow */
+      const glow = ctx.createRadialGradient(ball.x, ball.y, 0, ball.x, ball.y, BALL_R * 3.5);
+      glow.addColorStop(0, 'rgba(232,121,249,0.5)');
+      glow.addColorStop(1, 'transparent');
+      ctx.fillStyle = glow;
+      ctx.beginPath(); ctx.arc(ball.x, ball.y, BALL_R * 3.5, 0, Math.PI * 2); ctx.fill();
+
+      /* Ball */
+      const bd = ctx.createRadialGradient(ball.x - 2, ball.y - 2, 0, ball.x, ball.y, BALL_R);
+      bd.addColorStop(0, '#f9a8d4');
+      bd.addColorStop(0.5, '#e879f9');
+      bd.addColorStop(1, '#a855f7');
+      ctx.shadowColor = 'rgba(232,121,249,0.9)';
+      ctx.shadowBlur  = 22;
+      ctx.fillStyle   = bd;
+      ctx.beginPath(); ctx.arc(ball.x, ball.y, BALL_R, 0, Math.PI * 2); ctx.fill();
+      ctx.shadowBlur  = 0;
+    }
+
+    function drawScores() {
+      ctx.textAlign = 'center';
+      ctx.font      = '700 28px Inter, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.18)';
+      ctx.fillText(scores.p1, W / 4, 40);
+      ctx.fillText(scores.p2, (W * 3) / 4, 40);
+    }
+
+    function drawOverlay(msg, sub) {
+      ctx.fillStyle = 'rgba(5,5,13,0.7)';
+      ctx.fillRect(0, 0, W, H);
+      const cx = W / 2, cy = H / 2;
+      ctx.fillStyle = 'rgba(255,255,255,0.055)';
+      rrect(cx - 120, cy - 56, 240, 112, 18); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+      ctx.lineWidth = 1;
+      rrect(cx - 120, cy - 56, 240, 112, 18); ctx.stroke();
+      /* Specular */
+      const sg = ctx.createLinearGradient(cx - 120, cy - 56, cx + 120, cy - 56);
+      sg.addColorStop(0, 'transparent');
+      sg.addColorStop(0.4, 'rgba(255,255,255,0.12)');
+      sg.addColorStop(1, 'transparent');
+      ctx.fillStyle = sg;
+      rrect(cx - 120, cy - 56, 240, 1.5, [18, 18, 0, 0]); ctx.fill();
+
+      ctx.textAlign = 'center';
+      ctx.shadowColor = 'rgba(168,85,247,0.9)';
+      ctx.shadowBlur  = 16;
+      ctx.fillStyle   = '#fff';
+      ctx.font        = '700 24px Inter, sans-serif';
+      ctx.fillText(msg, cx, cy - 12);
+      ctx.shadowBlur  = 0;
+      ctx.font        = '400 13px Inter, sans-serif';
+      ctx.fillStyle   = 'rgba(255,255,255,0.45)';
+      ctx.fillText(sub, cx, cy + 14);
+    }
+
+    function loop() {
+      drawBg();
+
+      if (state === 'playing') {
+        /* Player paddle */
+        if (keys['KeyW']    || keys['ArrowUp'])   p1.y = Math.max(0,         p1.y - PAD_SPD);
+        if (keys['KeyS']    || keys['ArrowDown']) p1.y = Math.min(H - PAD_H, p1.y + PAD_SPD);
+
+        /* AI — simple tracking with slight imperfection */
+        const aiCx = p2.y + PAD_H / 2;
+        const diff  = ball.y - aiCx;
+        const aiSpd = Math.min(Math.abs(diff), PAD_SPD * 0.86);
+        p2.y += Math.sign(diff) * aiSpd;
+        p2.y  = Math.max(0, Math.min(H - PAD_H, p2.y));
+
+        /* Trail */
+        ball.trail.push({ x: ball.x, y: ball.y });
+        if (ball.trail.length > 10) ball.trail.shift();
+
+        /* Ball physics */
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+
+        /* Wall bounce */
+        if (ball.y - BALL_R < 0)    { ball.y = BALL_R;      ball.vy *= -1; }
+        if (ball.y + BALL_R > H)    { ball.y = H - BALL_R;  ball.vy *= -1; }
+
+        /* Paddle bounce helper */
+        function bounceOff(pad, isLeft) {
+          const hitPos = (ball.y - pad.y) / PAD_H;   /* 0..1 */
+          const angle  = (hitPos - 0.5) * 1.4;
+          const spd    = Math.min(Math.hypot(ball.vx, ball.vy) * 1.055, 16);
+          const dir    = isLeft ? 1 : -1;
+          ball.vx = dir * Math.cos(angle) * spd;
+          ball.vy = Math.sin(angle) * spd;
+          if (isLeft) ball.x = pad.x + PAD_W + BALL_R;
+          else        ball.x = pad.x - BALL_R;
+        }
+
+        /* Player paddle (left) */
+        if (ball.vx < 0
+            && ball.x - BALL_R < p1.x + PAD_W && ball.x + BALL_R > p1.x
+            && ball.y > p1.y && ball.y < p1.y + PAD_H) {
+          bounceOff(p1, true);
+        }
+        /* AI paddle (right) */
+        if (ball.vx > 0
+            && ball.x + BALL_R > p2.x && ball.x - BALL_R < p2.x + PAD_W
+            && ball.y > p2.y && ball.y < p2.y + PAD_H) {
+          bounceOff(p2, false);
+        }
+
+        /* Score */
+        if (ball.x - BALL_R < 0) {
+          scores.p2++;
+          state = 'scored';
+          setTimeout(() => { launchBall(-1); state = 'playing'; }, 1000);
+        }
+        if (ball.x + BALL_R > W) {
+          scores.p1++;
+          state = 'scored';
+          setTimeout(() => { launchBall(1); state = 'playing'; }, 1000);
+        }
+      }
+
+      drawPaddle(p1.x, p1.y, true);
+      drawPaddle(p2.x, p2.y, false);
+      drawBall();
+      drawScores();
+
+      if (state === 'idle')   drawOverlay('Pong', 'Click to play vs AI');
+      else if (state === 'scored') {
+        ctx.fillStyle = 'rgba(168,85,247,0.1)';
+        ctx.fillRect(0, 0, W, H);
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    reset();
+    loop();
+  })();
+  </script>
+</body>
+</html>
