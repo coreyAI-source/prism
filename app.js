@@ -216,9 +216,7 @@ function welcomeHTML() {
           </defs>
           <polygon points="8,68 40,6 40,68" fill="url(#rwL)" filter="url(#rwGlow)"/>
           <polygon points="40,6 72,68 40,68" fill="url(#rwR)" filter="url(#rwGlow)" opacity="0.92"/>
-          <line x1="40" y1="6" x2="40" y2="68" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-          <line x1="24" y1="16" x2="16" y2="50" stroke="rgba(255,255,255,0.18)" stroke-width="3" stroke-linecap="round"/>
-        </svg>
+          <line x1="40" y1="6" x2="40" y2="68" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>        </svg>
       </div>
       <div class="welcome-copy">
         <h1 class="welcome-heading">What do you need?</h1>
