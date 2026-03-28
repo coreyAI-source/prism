@@ -17,7 +17,7 @@ const FREE_MODELS = [
 ];
 
 /* ── Statuses that mean "this model is busy — try the next" ── */
-const RETRY_STATUSES = new Set([429, 500, 502, 503, 504]);
+const RETRY_STATUSES = new Set([404, 429, 500, 502, 503, 504]);
 
 /* ── Error message fragments that mean "token/context limit hit" ─
    OpenRouter returns 400 for these — we rotate instead of surfacing */
@@ -140,15 +140,13 @@ exports.handler = async (event) => {
       };
     }
 
-    /* Other non-retryable error (e.g. 401 auth) — surface it */
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      return {
-        statusCode: res.status,
-        headers: CORS,
-        body: JSON.stringify({ error: err?.error?.message || `Upstream error ${res.status}.` }),
-      };
+    /* API key invalid — no point trying other models */
+    if (res.status === 401) {
+      return { statusCode: 500, headers: CORS, body: JSON.stringify({ error: 'Service configuration error.' }) };
     }
+
+    /* Any other non-OK status — try the next model */
+    if (!res.ok) continue;
 
     /* Success — extract content */
     const data    = await res.json().catch(() => null);

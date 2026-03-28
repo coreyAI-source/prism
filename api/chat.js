@@ -15,7 +15,7 @@ const FREE_MODELS = [
   'microsoft/phi-3-mini-128k-instruct:free',
 ];
 
-const RETRY_STATUSES = new Set([429, 500, 502, 503, 504]);
+const RETRY_STATUSES = new Set([404, 429, 500, 502, 503, 504]);
 
 const SKIP_MODEL_PHRASES = [
   'context_length_exceeded',
@@ -122,12 +122,13 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: errMsg || 'Bad request.' });
     }
 
-    if (!upstream.ok) {
-      const err = await upstream.json().catch(() => ({}));
-      return res.status(upstream.status).json({
-        error: err?.error?.message || `Upstream error ${upstream.status}.`,
-      });
+    /* API key invalid — no point trying other models */
+    if (upstream.status === 401) {
+      return res.status(500).json({ error: 'Service configuration error.' });
     }
+
+    /* Any other non-OK status — try the next model */
+    if (!upstream.ok) continue;
 
     const data    = await upstream.json().catch(() => null);
     const content = data?.choices?.[0]?.message?.content;
