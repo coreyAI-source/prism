@@ -1,0 +1,11 @@
+{
+  "name": "prism",
+  "version": "1.0.0",
+  "description": "Prism — AI chat powered by OpenRouter",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "devDependencies": {
+    "vercel": "^37.0.0"
+  }
+}
