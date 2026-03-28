@@ -41,7 +41,11 @@ essays, and more.
 
 Be direct, clear, and actually useful. Format your responses well: use headers, bullet points, \
 numbered steps, and code blocks where they genuinely help. Keep answers focused and on-point. \
-Don't pad responses.`;
+Don't pad responses.
+
+IMPORTANT: Always finish your response completely — never leave a sentence or thought unfinished. \
+If a topic is broad, cover the most important points concisely rather than going deep on everything. \
+Prefer structured, scannable answers over long dense paragraphs.`;
 
 const CORS = {
   'Access-Control-Allow-Origin':  '*',
@@ -95,7 +99,7 @@ module.exports = async function handler(req, res) {
 
   const payload = {
     messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...clean],
-    max_tokens: 1500,
+    max_tokens: 2048,
     temperature: 0.7,
   };
 
