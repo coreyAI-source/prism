@@ -1101,6 +1101,35 @@ body.page-landing {
 .bubble pre { margin: 12px 0; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.07); background: rgba(0,0,0,0.55) !important; }
 .bubble pre code { display: block; padding: 14px 16px; background: transparent !important; font-size: 13px; line-height: 1.6; overflow-x: auto; color: #e2e8f0; border-radius: 0; border: none; }
 
+/* Copy button */
+.msg-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  max-width: 72%;
+}
+.msg-body .bubble { max-width: 100%; }
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 7px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  line-height: 1;
+}
+.copy-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); border-color: rgba(255,255,255,0.18); }
+.copy-btn.copied { color: var(--cyan); border-color: rgba(6,182,212,0.3); background: rgba(6,182,212,0.08); }
+.copy-btn svg { flex-shrink: 0; vertical-align: middle; }
+
 /* Typing indicator */
 .typing-bubble { display: flex; align-items: center; gap: 5px; padding: 14px 16px; }
 .dot {
@@ -1242,12 +1271,14 @@ textarea::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-ra
   .chat-glow { margin: 8px; border-radius: 17px; }
   .chat-card { border-radius: 15.5px; }
   .bubble { max-width: 88%; font-size: 14px; }
+  .msg-body { max-width: 88%; }
   .messages { padding: 14px; }
   .input-area { padding: 10px 12px 14px; }
   .welcome-heading { font-size: 24px; }
 }
 @media (max-width: 480px) {
   .bubble { max-width: 94%; }
+  .msg-body { max-width: 94%; }
   .chat-glow { margin: 4px; border-radius: 14px; }
   .chat-card { border-radius: 12.5px; }
   .chip { font-size: 12px; padding: 7px 13px; }
