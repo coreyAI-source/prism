@@ -1,13 +1,18 @@
 {
+  "functions": {
+    "api/chat.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
   "headers": [
     {
-      "source": "/(.*)\\.js",
+      "source": "/(.*)\\.html",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     },
     {
-      "source": "/(.*)\\.html",
+      "source": "/app.js",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
