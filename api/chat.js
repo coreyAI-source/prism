@@ -7,13 +7,16 @@
 /* ── Free models — confirmed available on OpenRouter, best-first ── */
 const FREE_MODELS = [
   'meta-llama/llama-3.3-70b-instruct:free',
-  'deepseek/deepseek-r1:free',
-  'deepseek/deepseek-chat:free',
-  'google/gemini-2.0-flash-exp:free',
-  'qwen/qwen-2.5-72b-instruct:free',
-  'mistralai/mistral-7b-instruct:free',
-  'microsoft/phi-3-mini-128k-instruct:free',
+  'mistralai/mistral-small-3.1-24b-instruct:free',
+  'google/gemma-3-27b-it:free',
+  'nvidia/nemotron-3-super-120b-a12b:free',
+  'nousresearch/hermes-3-llama-3.1-405b:free',
+  'stepfun/step-3.5-flash:free',
+  'google/gemma-3-12b-it:free',
+  'openrouter/free',
 ];
+
+const MODEL_TIMEOUT_MS = 9000; /* abort a single model after 9s */
 
 const RETRY_STATUSES = new Set([404, 429, 500, 502, 503, 504]);
 
@@ -99,6 +102,8 @@ module.exports = async function handler(req, res) {
   for (const model of FREE_MODELS) {
     let upstream;
     try {
+      const ac = new AbortController();
+      const t  = setTimeout(() => ac.abort(), MODEL_TIMEOUT_MS);
       upstream = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -108,7 +113,9 @@ module.exports = async function handler(req, res) {
           'X-Title':       'Prism',
         },
         body: JSON.stringify({ ...payload, model }),
+        signal: ac.signal,
       });
+      clearTimeout(t);
     } catch {
       continue;
     }

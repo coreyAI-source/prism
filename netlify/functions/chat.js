@@ -6,15 +6,17 @@
 
 /* ── Free models — confirmed available on OpenRouter, best-first ── */
 const FREE_MODELS = [
-  'openrouter/free',                          /* auto-routes to any available free model */
-  'nvidia/nemotron-3-super-120b-a12b:free',   /* 120B — largest free */
-  'minimax/minimax-m2.5:free',
-  'arcee-ai/trinity-large-preview:free',
+  'meta-llama/llama-3.3-70b-instruct:free',
+  'mistralai/mistral-small-3.1-24b-instruct:free',
+  'google/gemma-3-27b-it:free',
+  'nvidia/nemotron-3-super-120b-a12b:free',
+  'nousresearch/hermes-3-llama-3.1-405b:free',
   'stepfun/step-3.5-flash:free',
-  'nvidia/nemotron-3-nano-30b-a3b:free',
-  'liquid/lfm-2.5-1.2b-thinking:free',
-  'liquid/lfm-2.5-1.2b-instruct:free',
+  'google/gemma-3-12b-it:free',
+  'openrouter/free',
 ];
+
+const MODEL_TIMEOUT_MS = 9000;
 
 /* ── Statuses that mean "this model is busy — try the next" ── */
 const RETRY_STATUSES = new Set([404, 429, 500, 502, 503, 504]);
@@ -109,6 +111,8 @@ exports.handler = async (event) => {
   for (const model of FREE_MODELS) {
     let res;
     try {
+      const ac = new AbortController();
+      const t  = setTimeout(() => ac.abort(), MODEL_TIMEOUT_MS);
       res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -118,9 +122,11 @@ exports.handler = async (event) => {
           'X-Title':       'Prism',
         },
         body: JSON.stringify({ ...payload, model }),
+        signal: ac.signal,
       });
+      clearTimeout(t);
     } catch {
-      /* Network error — try next model */
+      /* Network error or timeout — try next model */
       continue;
     }
 
